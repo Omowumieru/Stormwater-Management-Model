@@ -2778,10 +2778,41 @@ EXPORT_TOOLKIT int swmm_getSubcatchStats(int index, SM_SubcatchStats *subcatchSt
         error_code = ERR_TKAPI_MEMORY;
 
     else
-        stats_getSubcatchStat(index, (TSubcatchStats **)&subcatchStats);
+            stats_getSubcatchStat(index, (TSubcatchStats **)&subcatchStats);
 
     return error_code;
 }
+
+EXPORT_TOOLKIT int swmm_getGWaterState(int index, SM_GWaterState *gWaterState)
+///
+/// Input:   index = Index of desired subcatchment
+/// Output:  Groundwater State Structure (SM_GWaterState) [theta (0), GWT elev (1), new flow (2), maxInfilVol (3)]
+/// Return:  API Error
+/// Purpose: Gets Groundwater State Parameter
+{
+    int error_code = 0;
+
+    // Check if Open
+    if (swmm_IsOpenFlag() == FALSE)
+        error_code = ERR_TKAPI_INPUTNOTOPEN;
+
+    // Check if Simulation is Running
+    else if (swmm_IsStartedFlag() == FALSE)
+        error_code = ERR_TKAPI_SIM_NRUNNING;
+
+    // Check if object index is within bounds
+    else if (index < 0 || index >= Nobjects[SUBCATCH])
+        error_code = ERR_TKAPI_OBJECT_INDEX;
+
+    else if (gWaterState == NULL)
+        error_code = ERR_TKAPI_MEMORY;
+    
+    else
+        gwater_getState(index, (double *)gWaterState);
+    return error_code;
+}
+
+
 
 
 EXPORT_TOOLKIT int swmm_getSystemRoutingTotals(SM_RoutingTotals *routingTotals)

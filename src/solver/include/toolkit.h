@@ -578,6 +578,15 @@ EXPORT_TOOLKIT int swmm_getPumpStats(int index, SM_PumpStats *pumpStats);
 EXPORT_TOOLKIT int swmm_getSubcatchStats(int index, SM_SubcatchStats *subcatchStats);
 
 /**
+ @brief Get current groundwater state.
+ @param index The index of a subcatchment
+ @param[out] GWaterState The groundwater state struct
+ pre-allocated by the caller
+ @return Error code
+*/
+EXPORT_TOOLKIT int swmm_getGWaterState(int index, SM_GWaterState *gWaterState);
+
+/**
  @brief Get system routing totals.
  @param[out] routingTot The system Routing Stats struct (see @ref SM_RoutingTotals).
  pre-allocated by the caller.

@@ -1008,6 +1008,19 @@ typedef struct
 
  typedef SM_SubcatchStats TSubcatchStats;
 
+//------------------------
+// GROUNDWATER STATE
+//------------------------
+// typedef struct
+// {
+//     double       theta;
+//     double       gwtElev;
+//     double       newFlow;
+//     double       maxInfilVol;
+// }  TGWaterState;
+
+ typedef SM_GWaterState TGWaterState;
+
 //----------------
 // NODE STATISTICS
 //----------------

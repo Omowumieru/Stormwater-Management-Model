@@ -255,6 +255,27 @@ typedef struct
 }  SM_SubcatchStats;
 
 
+/** @struct SM_GWaterState
+ *  @brief Groundwater State
+ *
+ * @var SM_GWaterState::theta
+ *   upper zone moisture content
+ * @var SM_GWaterState::gwtElev
+ *   bottomElev + gw->lowerDepth (length)
+ * @var SM_GWaterState::newFlow
+ *   gw outflow from current time period (flow)
+ * @var SM_GWaterState::maxInfilVol
+ *   max. infil. upper zone can accept (length)
+ */
+typedef struct
+{
+    double       theta;
+    double       gwtElev;
+    double       newFlow;
+    double       maxInfilVol;
+}  SM_GWaterState;
+
+
 /** @struct SM_RoutingTotals
  *  @brief System Flow Routing Statistics
  *
