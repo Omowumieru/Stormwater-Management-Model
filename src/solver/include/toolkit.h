@@ -580,7 +580,7 @@ EXPORT_TOOLKIT int swmm_getSubcatchStats(int index, SM_SubcatchStats *subcatchSt
 /**
  @brief Get current groundwater state.
  @param index The index of a subcatchment
- @param[out] GWaterState The groundwater state struct
+ @param[out] fWaterState The groundwater state struct
  pre-allocated by the caller
  @return Error code
 */
@@ -636,6 +636,14 @@ EXPORT_TOOLKIT int swmm_setOutfallStage(int index, double stage);
 @return Error code
 */
 EXPORT_TOOLKIT int swmm_setGagePrecip(int index, double total_precip);
+
+/**
+ @brief Set current groundwater state.
+ @param index The index of a subcatchment
+ @param gWaterState The new array of groundwater state variables
+ @return Error code
+*/
+EXPORT_TOOLKIT int swmm_setGWaterState(int index,  double x[4]);
 
 /**
  @brief Helper function to free memory array allocated in SWMM.

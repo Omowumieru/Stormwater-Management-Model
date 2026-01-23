@@ -2812,9 +2812,6 @@ EXPORT_TOOLKIT int swmm_getGWaterState(int index, SM_GWaterState *gWaterState)
     return error_code;
 }
 
-
-
-
 EXPORT_TOOLKIT int swmm_getSystemRoutingTotals(SM_RoutingTotals *routingTotals)
 ///
 /// Output:  System Routing Totals Structure (SM_RoutingTotals)
@@ -3242,6 +3239,32 @@ EXPORT_TOOLKIT int swmm_setGagePrecip(int index, double total_precip)
         }
      Gage[index].externalRain = total_precip;
     }
+    return error_code;
+}
+
+EXPORT_TOOLKIT int swmm_setGWaterState(int index,  double x[])
+//
+//  Input:   Groundwater State Structure (SM_GWaterState) [theta (0), GWT elev (1), new flow (2), maxInfilVol (3)]
+//  Return:  API Error
+//  Purpose: Sets Groundwater State Parameter: 
+{
+    int error_code = 0;
+
+    // Check if Open
+    if (swmm_IsOpenFlag() == FALSE)
+        error_code = ERR_TKAPI_INPUTNOTOPEN;
+
+    // Check if Simulation is Running
+    else if (swmm_IsStartedFlag() == FALSE)
+        error_code = ERR_TKAPI_SIM_NRUNNING;
+
+    // Check if object index is within bounds
+    else if (index < 0 || index >= Nobjects[SUBCATCH])
+        error_code = ERR_TKAPI_OBJECT_INDEX;
+    
+    else
+        gwater_setState(index, x);
+
     return error_code;
 }
 
