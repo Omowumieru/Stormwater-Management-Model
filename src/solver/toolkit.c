@@ -2783,6 +2783,7 @@ EXPORT_TOOLKIT int swmm_getSubcatchStats(int index, SM_SubcatchStats *subcatchSt
     return error_code;
 }
 
+
 EXPORT_TOOLKIT int swmm_getGWaterState(int index, SM_GWaterState *gWaterState)
 ///
 /// Input:   index = Index of desired subcatchment
@@ -2808,7 +2809,13 @@ EXPORT_TOOLKIT int swmm_getGWaterState(int index, SM_GWaterState *gWaterState)
         error_code = ERR_TKAPI_MEMORY;
     
     else
-        gwater_getState(index, (double *)gWaterState);
+    {
+        TGroundwater* gw = Subcatch[index].groundwater;
+        gWaterState-> theta = gw->theta;
+        gWaterState-> gwtElev = gw->bottomElev + gw->lowerDepth;
+        gWaterState-> newFlow = gw->newFlow;
+        gWaterState-> maxInfilVol = gw->maxInfilVol;
+    }
     return error_code;
 }
 
