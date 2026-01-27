@@ -3249,11 +3249,11 @@ EXPORT_TOOLKIT int swmm_setGagePrecip(int index, double total_precip)
     return error_code;
 }
 
-EXPORT_TOOLKIT int swmm_setGWaterState(int index,  double x[])
+EXPORT_TOOLKIT int swmm_setGWaterState(int index, SM_GWaterState *gWaterState)
 //
 //  Input:   Groundwater State Structure (SM_GWaterState) [theta (0), GWT elev (1), new flow (2), maxInfilVol (3)]
 //  Return:  API Error
-//  Purpose: Sets Groundwater State Parameter: 
+//  Purpose: Sets Groundwater State Parameters
 {
     int error_code = 0;
 
@@ -3270,7 +3270,14 @@ EXPORT_TOOLKIT int swmm_setGWaterState(int index,  double x[])
         error_code = ERR_TKAPI_OBJECT_INDEX;
     
     else
-        gwater_setState(index, x);
+    {
+        TGroundwater* gw = Subcatch[index].groundwater;
+        if ( gw == NULL ) return;
+        gw->theta = gWaterState-> theta;
+        gw->lowerDepth = gWaterState-> gwtElev - gw->bottomElev;
+        gw->oldFlow = gWaterState-> newFlow;
+        if ( gWaterState-> maxInfilVol != MISSING ) gw->maxInfilVol = gWaterState-> maxInfilVol;
+    }
 
     return error_code;
 }
