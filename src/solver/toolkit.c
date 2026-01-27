@@ -3273,10 +3273,14 @@ EXPORT_TOOLKIT int swmm_setGWaterState(int index, SM_GWaterState *gWaterState)
     {
         TGroundwater* gw = Subcatch[index].groundwater;
         if ( gw == NULL ) return;
-        gw->theta = gWaterState-> theta;
-        gw->lowerDepth = gWaterState-> gwtElev - gw->bottomElev;
-        gw->oldFlow = gWaterState-> newFlow;
-        if ( gWaterState-> maxInfilVol != MISSING ) gw->maxInfilVol = gWaterState-> maxInfilVol;
+        if ( gWaterState-> theta != -999 ) 
+            gw->theta = gWaterState-> theta;
+        if ( gWaterState-> gwtElev != -999 ) 
+            gw->lowerDepth = gWaterState-> gwtElev - gw->bottomElev;
+        if ( gWaterState-> newFlow != -999 ) 
+            gw->oldFlow = gWaterState-> newFlow;
+        if ( gWaterState-> maxInfilVol != MISSING && gWaterState-> maxInfilVol != -999) 
+            gw->maxInfilVol = gWaterState-> maxInfilVol;
     }
 
     return error_code;
