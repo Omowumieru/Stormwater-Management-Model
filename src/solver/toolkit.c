@@ -2812,9 +2812,9 @@ EXPORT_TOOLKIT int swmm_getGWaterState(int index, SM_GWaterState *gWaterState)
     {
         TGroundwater* gw = Subcatch[index].groundwater;
         gWaterState-> theta = gw->theta;
-        gWaterState-> gwtElev = gw->bottomElev + gw->lowerDepth;
-        gWaterState-> newFlow = gw->newFlow;
-        gWaterState-> maxInfilVol = gw->maxInfilVol;
+        gWaterState-> gwtElev = (gw->bottomElev + gw->lowerDepth) * UCF(LENGTH);
+        gWaterState-> newFlow = gw->newFlow * UCF(GWFLOW);
+        gWaterState-> maxInfilVol = gw->maxInfilVol * UCF(VOLUME);
     }
     return error_code;
 }
@@ -3276,11 +3276,11 @@ EXPORT_TOOLKIT int swmm_setGWaterState(int index, SM_GWaterState *gWaterState)
         if ( gWaterState-> theta != -999 ) 
             gw->theta = gWaterState-> theta;
         if ( gWaterState-> gwtElev != -999 ) 
-            gw->lowerDepth = gWaterState-> gwtElev - gw->bottomElev;
+            gw->lowerDepth = (gWaterState-> gwtElev / UCF(LENGTH)) - gw->bottomElev;
         if ( gWaterState-> newFlow != -999 ) 
-            gw->oldFlow = gWaterState-> newFlow;
+            gw->oldFlow = gWaterState-> newFlow / UCF(GWFLOW);
         if ( gWaterState-> maxInfilVol != MISSING && gWaterState-> maxInfilVol != -999) 
-            gw->maxInfilVol = gWaterState-> maxInfilVol;
+            gw->maxInfilVol = gWaterState-> maxInfilVol / UCF(VOLUME);
     }
 
     return error_code;
