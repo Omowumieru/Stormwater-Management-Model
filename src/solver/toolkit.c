@@ -3249,7 +3249,7 @@ EXPORT_TOOLKIT int swmm_setGagePrecip(int index, double total_precip)
     return error_code;
 }
 
-EXPORT_TOOLKIT int swmm_setGWaterState(int index, SM_GWaterState *gWaterState)
+EXPORT_TOOLKIT int swmm_setGWaterState(int index, SM_GWaterState *gWaterState_in)
 //
 //  Input:   Groundwater State Structure (SM_GWaterState) [theta (0), GWT elev (1), new flow (2), maxInfilVol (3)]
 //  Return:  API Error
@@ -3272,15 +3272,15 @@ EXPORT_TOOLKIT int swmm_setGWaterState(int index, SM_GWaterState *gWaterState)
     else
     {
         TGroundwater* gw = Subcatch[index].groundwater;
-        if ( gw == NULL ) return;
-        if ( gWaterState-> theta != -999 ) 
-            gw->theta = gWaterState-> theta;
-        if ( gWaterState-> gwtElev != -999 ) 
-            gw->lowerDepth = (gWaterState-> gwtElev / UCF(LENGTH)) - gw->bottomElev;
-        if ( gWaterState-> newFlow != -999 ) 
-            gw->oldFlow = gWaterState-> newFlow / UCF(GWFLOW);
-        if ( gWaterState-> maxInfilVol != MISSING && gWaterState-> maxInfilVol != -999) 
-            gw->maxInfilVol = gWaterState-> maxInfilVol / UCF(VOLUME);
+        if ( gw == NULL ) return error_code;
+        if ( gWaterState_in-> theta != -999 ) 
+            gw->theta = gWaterState_in-> theta;
+        if ( gWaterState_in-> gwtElev != -999 ) 
+            gw->lowerDepth = (gWaterState_in-> gwtElev / UCF(LENGTH)) - gw->bottomElev;
+        if ( gWaterState_in-> newFlow != -999 ) 
+            gw->oldFlow = gWaterState_in-> newFlow / UCF(GWFLOW);
+        if ( gWaterState_in-> maxInfilVol != MISSING && gWaterState_in-> maxInfilVol != -999) 
+            gw->maxInfilVol = gWaterState_in-> maxInfilVol / UCF(VOLUME);
     }
 
     return error_code;

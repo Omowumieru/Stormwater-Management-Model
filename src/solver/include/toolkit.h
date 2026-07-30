@@ -643,7 +643,7 @@ EXPORT_TOOLKIT int swmm_setGagePrecip(int index, double total_precip);
  @param gWaterState The new array of groundwater state variables
  @return Error code
 */
-EXPORT_TOOLKIT int swmm_setGWaterState(int index,  double x[4]);
+EXPORT_TOOLKIT int swmm_setGWaterState(int index,  SM_GWaterState *gWaterState_in);
 
 /**
  @brief Helper function to free memory array allocated in SWMM.
