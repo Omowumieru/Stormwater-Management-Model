@@ -646,6 +646,15 @@ EXPORT_TOOLKIT int swmm_setGagePrecip(int index, double total_precip);
 EXPORT_TOOLKIT int swmm_setGWaterState(int index,  SM_GWaterState *gWaterState_in);
 
 /**
+ * @brief Set custom groundwater flow equations during runtime
+ * @param index The index of a subcatchment
+ * @param expression_type "LAT" for lateral flow or "DEEP" for deep groundwater flow
+ * @param custom_expression The custom groundwater expression to be used
+ * @return Error code
+ */
+EXPORT_TOOLKIT int swmm_setGWaterEqn(int index, char* expression_type, char* custom_expression);
+
+/**
  @brief Helper function to free memory array allocated in SWMM.
  @param array The pointer to the array
  @return Void.

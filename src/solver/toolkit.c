@@ -3251,7 +3251,8 @@ EXPORT_TOOLKIT int swmm_setGagePrecip(int index, double total_precip)
 
 EXPORT_TOOLKIT int swmm_setGWaterState(int index, SM_GWaterState *gWaterState_in)
 //
-//  Input:   Groundwater State Structure (SM_GWaterState) [theta (0), GWT elev (1), new flow (2), maxInfilVol (3)]
+//  Input:   index = Index of desired subcatchment
+//           SM_GWaterState = Groundwater State Structure [theta (0), GWT elev (1), new flow (2), maxInfilVol (3)]
 //  Return:  API Error
 //  Purpose: Sets Groundwater State Parameters
 {
@@ -3281,6 +3282,55 @@ EXPORT_TOOLKIT int swmm_setGWaterState(int index, SM_GWaterState *gWaterState_in
             gw->oldFlow = gWaterState_in-> newFlow / UCF(GWFLOW);
         if ( gWaterState_in-> maxInfilVol != MISSING && gWaterState_in-> maxInfilVol != -999) 
             gw->maxInfilVol = gWaterState_in-> maxInfilVol / UCF(VOLUME);
+    }
+
+    return error_code;
+}
+
+EXPORT_TOOLKIT int swmm_setGWaterEqn(int index, char* expression_type, char* custom_expression)
+
+//
+//  Input:   index = Index of desired subcatchment
+//           expression_type   = "LAT" or "DEEP" for lateral or deep groundwater flow
+//           custom_expression = custom expression to be applied
+//  Return:  API Error
+//  Purpose: Allows user to set or reset custom groundwater equations for lateral or 
+//           deep fluxes out of aquifer during runtime
+//  Format is: subcatch LATERAL/DEEP <expr>
+//     where subcatch is the ID of the subcatchment, LATERAL is for lateral
+//     GW flow, DEEP is for deep GW flow and <expr> is any well-formed math
+//     expression.  
+{
+    int error_code = 0;
+
+    // Check if Open
+    if (swmm_IsOpenFlag() == FALSE)
+        error_code = ERR_TKAPI_INPUTNOTOPEN;
+
+    // Check if Simulation is Running
+    else if (swmm_IsStartedFlag() == FALSE)
+        error_code = ERR_TKAPI_SIM_NRUNNING;
+
+    // Check if object index is within bounds
+    else if (index < 0 || index >= Nobjects[SUBCATCH])
+        error_code = ERR_TKAPI_OBJECT_INDEX;
+
+    // Check that expression_type is correct
+    else if (!match(expression_type, "LAT") && !match(expression_type, "DEEP"))
+        error_code = ERR_TKAPI_WRONG_TYPE;
+    
+    else
+    {
+        // get subcatch ID after passing in subcatch index
+        char* subcatchID = Subcatch[index].ID;
+
+        // construct token array needed for gwater_readFlowExpression
+        char* Tok[3];
+        Tok[0] = subcatchID;
+        Tok[1] = expression_type;
+        Tok[2] = custom_expression;
+
+        error_code = gwater_readFlowExpression(Tok, 3);
     }
 
     return error_code;
